@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 
 ## [2.1.6] - 2021-06-14
+## Changed
+- Updated android app context in `ReactNativeBiometrics.java` file
+
+## [2.1.6] - 2021-06-14
 ## Added
 - Added fingerprint check and disabled `FaceId` for android >= 10(the android [Biometric](https://developer.android.com/jetpack/androidx/releases/biometric) library version is older and `biometricManager.canAuthenticate()` is not working as expected for Android >=10 in some devices)
 
