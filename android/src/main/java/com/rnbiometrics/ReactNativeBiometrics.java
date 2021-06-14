@@ -1,5 +1,6 @@
 package com.rnbiometrics;
 
+import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
@@ -53,8 +54,30 @@ public class ReactNativeBiometrics extends ReactContextBaseJavaModule {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 ReactApplicationContext reactApplicationContext = getReactApplicationContext();
                 BiometricManager biometricManager = BiometricManager.from(reactApplicationContext);
-                int canAuthenticate = biometricManager.canAuthenticate();
 
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    WritableMap resultMap = new WritableNativeMap();
+                    FingerprintManager fingerprintManager = (FingerprintManager) reactApplicationContext.getSystemService(Context.FINGERPRINT_SERVICE);
+                    if (fingerprintManager == null || !fingerprintManager.isHardwareDetected()) {
+                        // Device doesn't support fingerprint authentication
+                        resultMap.putBoolean("available", false);
+                        resultMap.putString("error", "BIOMETRIC_ERROR_NO_HARDWARE");
+                    } else if (!fingerprintManager.hasEnrolledFingerprints()) {
+                        // User hasn't enrolled any fingerprints to authenticate with
+                        resultMap.putBoolean("available", false);
+                        resultMap.putString("error", "BIOMETRIC_ERROR_NONE_ENROLLED");
+                    } else {
+                        // Everything is ready for fingerprint authentication
+                        resultMap.putBoolean("available", true);
+                        resultMap.putString("biometryType", "Biometrics");
+                    }
+
+                    promise.resolve(resultMap);
+                    return;
+                }
+
+
+                int canAuthenticate = biometricManager.canAuthenticate();
                 if (canAuthenticate == BiometricManager.BIOMETRIC_SUCCESS) {
                     WritableMap resultMap = new WritableNativeMap();
                     resultMap.putBoolean("available", true);
@@ -84,8 +107,10 @@ public class ReactNativeBiometrics extends ReactContextBaseJavaModule {
                 resultMap.putString("error", "Unsupported android version");
                 promise.resolve(resultMap);
             }
+            return;
         } catch (Exception e) {
             promise.reject("Error detecting biometrics availability: " + e.getMessage(), "Error detecting biometrics availability: " + e.getMessage());
+            return;
         }
     }
 
