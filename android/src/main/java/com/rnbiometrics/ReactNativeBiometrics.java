@@ -57,7 +57,7 @@ public class ReactNativeBiometrics extends ReactContextBaseJavaModule {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     WritableMap resultMap = new WritableNativeMap();
-                    FingerprintManager fingerprintManager = (FingerprintManager) reactApplicationContext.getSystemService(Context.FINGERPRINT_SERVICE);
+                    FingerprintManager fingerprintManager = (FingerprintManager) reactApplicationContext.getSystemService(reactApplicationContext.FINGERPRINT_SERVICE);
                     if (fingerprintManager == null || !fingerprintManager.isHardwareDetected()) {
                         // Device doesn't support fingerprint authentication
                         resultMap.putBoolean("available", false);
