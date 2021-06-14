@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.1.5] - 2021-06-14
+## Added
+- Added fingerprint check and disabled `FaceId` for android >= 10(the android [Biometric](https://developer.android.com/jetpack/androidx/releases/biometric) library version is older and `biometricManager.canAuthenticate()` is not working as expected for Android >=10 in some devices)
+
 ## [2.1.4] - 2020-02-10
 ## Changed
 - Removed duplicate onAuthenticationError call in android
