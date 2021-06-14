@@ -1,7 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [2.1.6] - 2021-06-14
+
+## [2.1.8] - 2021-06-14
+## Added
+- Added `build/cjs` folder to support metro bundler
+
+## [2.1.7] - 2021-06-14
 ## Changed
 - Updated android app context in `ReactNativeBiometrics.java` file
 
